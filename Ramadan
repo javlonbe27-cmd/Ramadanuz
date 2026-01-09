@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ramazon Shukuhi</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'Noto Sans',Arial,sans-serif;background:radial-gradient(circle at top,#1a1a2e,#020617);color:#f8fafc;min-height:100vh;padding-bottom:100px;overflow-x:hidden;}
+
+/* Emoji floating */
+.emoji{position:fixed;font-size:28px;animation:float 15s linear infinite;opacity:.7;}
+@keyframes float{0%{transform:translateY(110vh) rotate(0deg);}50%{transform:translateY(50vh) rotate(180deg);}100%{transform:translateY(-10vh) rotate(360deg);}}
+
+/* Pages */
+.page{display:none;padding:20px;animation:fade .6s;}
+.page.active{display:block;}
+@keyframes fade{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0);}}
+
+/* Headings */
+h2{text-align:center;color:#facc15;margin:15px 0;font-weight:700;font-size:26px;text-shadow:0 0 10px #facc15;}
+
+/* Cards */
+.card{background:rgba(2,6,23,.85);border-radius:22px;padding:18px;margin:15px 0;box-shadow:0 0 25px rgba(250,204,21,.2);position:relative;overflow:hidden;transition:0.5s;}
+.card:hover{transform:scale(1.03);}
+.card-content{opacity:0;transform:translateY(15px);transition:0.5s;}
+.card.show .card-content{opacity:1;transform:translateY(0);}
+
+/* Buttons */
+.btn{width:100%;padding:14px;border:none;border-radius:16px;font-size:16px;font-weight:700;margin-top:10px;cursor:pointer;transition:0.3s;}
+.btn:hover{transform:scale(1.05);}
+.gold{background:#facc15;color:#020617;}
+.green{background:#22c55e;color:#020617;}
+.red{background:#fb7185;color:#020617;}
+.blue{background:#38bdf8;color:#020617;}
+
+/* Bottom nav */
+.bottom{position:fixed;bottom:0;left:0;right:0;height:90px;background:#020617;display:flex;justify-content:space-around;align-items:center;border-top:2px solid #facc15;}
+.nav{text-align:center;font-size:12px;color:#94a3b8;}
+.nav span{font-size:26px;display:block;}
+.nav.active{color:#facc15;transform:translateY(-6px);}
+
+/* Animations */
+@keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.05)}}
+
+/* Tasbeh */
+.tasbeh{width:200px;height:200px;border-radius:50%;margin:20px auto;background:radial-gradient(circle,#fde68a,#facc15,#ca8a04);display:flex;align-items:center;justify-content:center;color:#020617;font-size:20px;font-weight:700;box-shadow:0 0 50px rgba(250,204,21,.8);animation:pulse 2s infinite;cursor:pointer;}
+.count{text-align:center;font-size:16px;margin-top:10px;}
+.timer{text-align:center;margin-top:10px;color:#facc15;font-size:14px;}
+.ehson-text{font-size:14px;margin-top:8px;color:#f8fafc;opacity:0.8;line-height:1.5;}
+</style>
+</head>
+<body>
+
+<!-- Emoji Floating -->
+<div class="emoji" style="left:5%">🌙</div>
+<div class="emoji" style="left:15%;animation-delay:2s">⭐️</div>
+<div class="emoji" style="left:30%;animation-delay:4s">🕌</div>
+<div class="emoji" style="left:45%;animation-delay:1s">🕋</div>
+<div class="emoji" style="left:60%;animation-delay:3s">🌛</div>
+<div class="emoji" style="left:75%;animation-delay:5s">🌌</div>
+<div class="emoji" style="left:90%;animation-delay:2s">🌠</div>
+
+<!-- HOME -->
+<div id="home" class="page active">
+<h2>🌙 Assalomu alaykum, Qadrdonim!</h2>
+<div class="card">
+<button class="btn gold" onclick="openLink('https://t.me/ramazon_taqvim_2026')">⏰ Ro‘za vaqtlari</button>
+<button class="btn green" onclick="openLink('https://t.me/sahar_iftorlik')">🤲 Duolar kanali</button>
+</div>
+</div>
+
+<!-- DUOLAR -->
+<div id="duolar" class="page">
+<h2>🤲 Duolar</h2>
+<div id="duaList" class="card">
+<!-- Duolar ro'yxati tugmalar -->
+</div>
+<div id="duaCard" class="card" style="display:none;">
+<div class="card-content" id="duaContent"></div>
+</div>
+</div>
+
+<!-- ROZA -->
+<div id="roza" class="page">
+<h2>🟢 Bugun ro‘za tutdingizmi?</h2>
+<div class="card" id="rozaBox">
+<button class="btn green" onclick="roza(true)">✅ Ha</button>
+<button class="btn red" onclick="roza(false)">❌ Yo‘q</button>
+<div class="timer" id="timerBox"></div>
+</div>
+</div>
+
+<!-- PROFILE -->
+<div id="profile" class="page">
+<h2>👤 Profil</h2>
+<div class="card">
+<button class="btn gold" onclick="alert('🌙 Siz '+(localStorage.roza||0)+' kun ro‘za tutdingiz')">📊 Ro‘za hisobim</button>
+</div>
+</div>
+
+<!-- TASBEH -->
+<div id="tasbeh" class="page">
+<h2>📿 Tasbeh</h2>
+<div class="tasbeh" onclick="tapTasbeh()" id="zikr">SUBHANALLOH</div>
+<div class="count" id="count">0 / 33</div>
+</div>
+
+<!-- EHSON -->
+<div id="ehson" class="page">
+<h2>💖 Ehson</h2>
+<div class="card">
+<p>Anorbank: <b>9860 6067 5547 9551</b></p><button class="btn blue" onclick="copy('9860606755479551')">Copy</button>
+<p>Hamkorbank: <b>4231 2000 7193 8483</b></p><button class="btn blue" onclick="copy('4231200071938483')">Copy</button>
+<p>Uzum Bank: <b>4916 9903 3457 7746</b></p><button class="btn blue" onclick="copy('4916990334577746')">Copy</button>
+<p class="ehson-text">Ehsonlar Ramazon oyida qiyin ahvolda bo‘lgan oilalarga yetkaziladi. Karta egasi: <b>Mamazulunov Javlonbek</b></p>
+<button class="btn gold" onclick="openLink('https://t.me/ramazon_ehsonlari')">🌙 Ehson guruhi</button>
+</div>
+</div>
+
+<!-- NAV -->
+<div class="bottom">
+<div class="nav active" onclick="nav('home',this)"><span>🏠</span>Bosh</div>
+<div class="nav" onclick="nav('duolar',this)"><span>🤲</span>Duolar</div>
+<div class="nav" onclick="nav('roza',this)"><span>🟢</span>Ro‘za</div>
+<div class="nav" onclick="nav('profile',this)"><span>👤</span>Profil</div>
+<div class="nav" onclick="nav('tasbeh',this)"><span>📿</span>Tasbeh</div>
+<div class="nav" onclick="nav('ehson',this)"><span>💖</span>Ehson</div>
+</div>
+
+<script>
+// NAV
+function nav(id,el){
+document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+document.getElementById(id).classList.add('active');
+document.querySelectorAll('.nav').forEach(n=>n.classList.remove('active'));
+el.classList.add('active');
+}
+
+// LINK & COPY
+function openLink(u){window.open(u,'_blank')}
+function copy(t){navigator.clipboard.writeText(t);alert("Nusxalandi 🤍")}
+
+// DUOLAR
+const duolar=[
+{name:"Og‘iz yopish (Saharlik)",ar:"Navaytu an asuma sovma shahri ramazona minal fajri ilal mag‘ribi, xolisan lillahi ta’ala. Allohu akbar.",ma:"Ramazon ro‘zasini tongdan kun botguncha xolis Alloh uchun tutishni niyat qildim."},
+{name:"Og‘iz ochish (Iftorlik)",ar:"Allohumma laka sumtu va bika amantu va ‘alayka tavakkaltu va ‘ala rizqika aftartu, fag‘firli ya g‘offaru ma qoddamtu va ma axxortu.",ma:"Ey Alloh, Sening uchun ro‘za tutdim, Senga iymon keltirdim, Senga tavakkal qildim va bergan rizqing bilan iftor qildim. Ey gunohlarni kechiruvchi Zot, mening avvalgi va keyingi gunohlarimni mag‘firat qil."},
+{name:"Ovqatdan oldin",ar:"Bismillahir Rohmanir Rohiym",ma:""},
+{name:"Ovqatdan keyin",ar:"Alhamdu lillahillazi at’amana va saqona va ja’alana minal muslimiyn.",ma:"Bizni to‘ydirgan va musulmonlardan qilgan Allohga hamdlar bo‘lsin."},
+{name:"Uyga kirayotganda",ar:"Bismillahi valajna va bismillahi xorajna va ‘ala Robbina tavakkalna.",ma:""},
+{name:"Uydan chiqayotganda",ar:"Bismillahi tavakkaltu ‘alalloh, la havla va la quvvata illa billah.",ma:""},
+{name:"Uyqudan turganda",ar:"Alhamdu lillahillazi ahyana ba’da ma amatana va ilayhin nushur.",ma:""},
+{name:"Uxlashdan oldin",ar:"Allohumma bismika amutu va ahya.",ma:""},
+{name:"Ota-ona uchun",ar:"Robbirhamhuma kama robbayani sog‘iyro.",ma:""},
+{name:"Masjidga kirayotganda",ar:"Allohummaftah li abvaba rohmatik.",ma:""}
+];
+const duaList=document.getElementById('duaList');
+duolar.forEach((d,i)=>{
+let b=document.createElement('button');
+b.className='btn gold'; b.innerText=d.name; b.onclick=()=>showDua(i);
+duaList.appendChild(b);
+});
+function showDua(i){
+let duaCard=document.getElementById('duaCard');
+let duaContent=document.getElementById('duaContent');
+duaCard.style.display='block';
+duaCard.classList.add('show');
+duaContent.innerHTML=`<h3 style="text-align:center;color:#facc15;">${duolar[i].name}</h3>
+<p style="margin-top:10px;font-size:18px;">${duolar[i].ar}</p>
+<p style="margin-top:10px;font-size:16px;opacity:0.9;">${duolar[i].ma}</p>
+<p style="margin-top:10px;font-size:14px;opacity:0.7;">📌 Eslatma: Duolarni chin dildan va ixlos bilan qilish ularning qabul bo‘lish ehtimolini oshiradi. Duo qilishdan oldin va keyin Payg‘ambarimizga (s.a.v.) salovot aytish ham go‘zal odatlardan.</p>`;
+}
+
+// ROZA
+function roza(ok){
+let last=localStorage.getItem('lastRoza')||0;
+let now=Date.now();
+if(now-last<24*60*60*1000){alert("24 soat ichida savol berilgan. Keyinroq qaytadan kirish.");return;}
+localStorage.setItem('lastRoza',now);
+let r=parseInt(localStorage.roza||0);
+if(ok){localStorage.roza=r+1;document.getElementById('rozaBox').innerHTML="🌟 Alloh ro‘zangizni qabul qilsin 🤲";}
+else{document.getElementById('rozaBox').innerHTML="🌱 Ertaga tutishingizga tilakdoshmiz";}
+startTimer();
+}
+function startTimer(){
+let end=Date.now()+24*60*60*1000;
+let timerBox=document.getElementById('timerBox');
+let interval=setInterval(()=>{
+let now=Date.now();let diff=end-now;
+if(diff<=0){clearInterval(interval);timerBox.innerText="✅ 24 soatdan keyin yana keling";}
+else{let h=Math.floor(diff/3600000);let m=Math.floor((diff%3600000)/60000);let s=Math.floor((diff%60000)/1000);timerBox.innerText=`⌛ ${h}h ${m}m ${s}s keyin yana keling`; }
+},1000);
+}
+
+// TASBEH
+let zikrIndex=0,count=0;
+let tasbehStages=["SUBHANALLOH","ALHAMDULILLAH","ALLOHU AKBAR","LA ILAHA ILLALLOH"];
+const allahNames=["AR-RAHMAN","AR-RAHIM","AL-MALIK","AL-QUDDUS","AS-SALAM","AL-MU’MIN","AL-MUHAYMIN","AL-AZIZ","AL-JABBAR","AL-MUTAKABBIR"]; 
+function tapTasbeh(){
+count++;document.getElementById('count').innerText=count+" / 33";
+if(count>=33){count=0;zikrIndex++;
+if(zikrIndex<tasbehStages.length){document.getElementById('zikr').innerText=tasbehStages[zikrIndex];}
+else{let nameIndex=(zikrIndex-tasbehStages.length)%allahNames.length;document.getElementById('zikr').innerText=allahNames[nameIndex];}}
+}
+</script>
+</body>
+</html>
